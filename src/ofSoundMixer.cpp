@@ -70,7 +70,13 @@ float ofSoundMixer::SampleSignal(int sourceID, int tick) {
     float period = 1.f / freq;
     switch (mode) {
         case SIN_MODE:
-            return volume * sin(2.f * M_PI * freq * adjustedTick);
+        {
+            float fundamental = volume * sin(2.f * M_PI * freq * adjustedTick) / 2.f;
+            float second_partial = volume * sin(2.f * M_PI * 2 * freq * adjustedTick) / 4.f;
+            float third_partial = volume * sin(2.f * M_PI * 3 * freq * adjustedTick) / 8.f;
+            float fourth_partial = volume * sin(2.f * M_PI * 4 * freq * adjustedTick) / 8.f;
+            return fundamental + second_partial + third_partial + fourth_partial;
+        }
         case SAW_MODE:
         case TRIANGLE_MODE:
             return volume * (2.f * freq * (fmod(adjustedTick, period) - 0.5f * period));

@@ -1,4 +1,4 @@
-6. Undo is your friend
+6. Listen carefully
 source 500 200 440 660 880
 sink 250 700 440 3
 sink 500 700 660 3

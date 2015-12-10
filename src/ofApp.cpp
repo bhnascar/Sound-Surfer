@@ -25,6 +25,7 @@ void ofApp::setup() {
     sm = shared_ptr<ofSoundMixer>(new ofSoundMixer(this, 0));
     SoundSource::Initialize(sm.get());
     SoundParticle::Initialize(sm.get());
+    ParticleSink::Initialize(sm.get());
     
     // Load levels.
     Level::Initialize(&box2d, sm.get());

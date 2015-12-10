@@ -118,9 +118,20 @@ public:
      * collection count == sink capacity (limit). */
     bool isFull();
     
-    virtual void draw();
+    /* Plays this particle sink's collection pitch. */
+    void play();
+    void stop();
+    
+    /* Standard draw callback. */
+    virtual void draw(ofColor color);
+    
+    static void Initialize(ofSoundMixer* sm);
     
 private:
+    static ofSoundMixer* sm;
+    int soundSourceID;
+    bool isPlaying = false;
+    
     static ofTrueTypeFont font;
     
     int collectionCount = 0;
@@ -128,4 +139,5 @@ private:
     float sinkRadius = 100;
     float limit = 10;
     float frequency;
+    float period;
 };

@@ -49,6 +49,9 @@ private:
     std::shared_ptr<ofPolyline> currentLine;
     b2Body* selectedBody = NULL;
     
+    /* Level play start time. */
+    float startTime = -1.f;
+    
     /* Level title. */
     std::string title;
     

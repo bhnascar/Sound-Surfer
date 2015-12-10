@@ -5,9 +5,11 @@
 #define TIME_SCALE 0.01f
 #define PIXEL_SCALE 10000.f
 #define WAVE_RANGE 200.f
+#define WAVE_RANGE_2 100.f
 
 ofSoundMixer* SoundSource::sm = NULL;
 ofSoundMixer* SoundParticle::sm = NULL;
+ofSoundMixer* ParticleSink::sm = NULL;
 ofTrueTypeFont ParticleSink::font;
 
 SoundParticle::SoundParticle(float freq) {
@@ -192,10 +194,14 @@ void ParticleSource::draw() {
 }
 
 ParticleSink::ParticleSink(float limit, float freq)
-    : limit(limit), frequency(freq) {
+    : limit(limit), frequency(freq), period(1.f / freq) {
     if (!font.isLoaded()) {
         font.loadFont("Kiddish.ttf", 40, true, true);
     }
+    SMSoundProperties properties;
+    properties.freq = frequency;
+    properties.volume = 0.f;
+    soundSourceID = sm->AddSource(properties);
 }
 
 ParticleSink::~ParticleSink() {
@@ -233,7 +239,17 @@ bool ParticleSink::isFull() {
     return collectionCount >= limit;
 }
 
-void ParticleSink::draw() {
+void ParticleSink::play() {
+    isPlaying = true;
+    sm->Play(soundSourceID, 1.0);
+}
+
+void ParticleSink::stop() {
+    isPlaying = false;
+    sm->Play(soundSourceID, 0.0);
+}
+
+void ParticleSink::draw(ofColor color) {
     if(!isBody()) return;
     
     // Translate and rotate context to particle position.
@@ -241,9 +257,25 @@ void ParticleSink::draw() {
     ofTranslate(getPosition().x, getPosition().y, 0);
     ofRotate(getRotation(), 0, 0, 1);
     
+    // Draw waves.
+    if (isPlaying) {
+        ofPushStyle();
+        ofNoFill();
+        ofSetLineWidth(3);
+        float offset = fmod(TIME_SCALE * ofGetElapsedTimef(), period);
+        for (float x = offset; x * PIXEL_SCALE < WAVE_RANGE_2; x += period) {
+            float alpha =  (WAVE_RANGE_2 - x * PIXEL_SCALE) / WAVE_RANGE_2;
+            ofSetColor(color.r, color.g, color.b, color.a * alpha);
+            ofCircle(0, 0, getRadius() + x * PIXEL_SCALE);
+        }
+        ofCircle(0, 0, getRadius());
+        ofPopStyle();
+    }
+    
     // Draw particle.
     ofPushStyle();
     ofFill();
+    ofSetColor(color);
     ofCircle(0, 0, 50);
     ofPopStyle();
     
@@ -259,4 +291,8 @@ void ParticleSink::draw() {
     int height = font.stringHeight(buff.str());
     font.drawString(buff.str(), getPosition().x - width / 2.f, getPosition().y + height / 2.f);
     ofPopStyle();
+}
+
+void ParticleSink::Initialize(ofSoundMixer* sm) {
+    ParticleSink::sm = sm;
 }

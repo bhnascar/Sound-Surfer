@@ -95,6 +95,7 @@ void Level::loadFromFile(const std::string filename) {
             ss >> x >> y >> freq >> limit;
             sinks.push_back(std::shared_ptr<ParticleSink>(new ParticleSink(limit, freq)));
             sinks.back().get()->setup(box2d->getWorld(), x, y, 0);
+            sinks.back().get()->play();
         }
     }
 }
@@ -109,6 +110,23 @@ bool Level::complete() {
 }
 
 void Level::update() {
+    // Log start time.
+    if (startTime == -1.f) {
+        startTime = ofGetElapsedTimef();
+    }
+    
+    // Play preview sounds from sinks.
+    for (int i = 0; i < sinks.size(); i++) {
+        ParticleSink* sink = sinks[i].get();
+        float now = ofGetElapsedTimef();
+        if (now - startTime > i && now - startTime < i + 1) {
+            sink->play();
+        }
+        else {
+            sink->stop();
+        }
+    }
+    
     // Add new particles.
     for (int i = 0; i < sources.size(); i++) {
         ParticleSource* source = sources[i].get();
@@ -164,8 +182,7 @@ void Level::draw(bool highlightsOnly) {
         // range is 220 - 880
         float red = ((660.f - freq) / 660.f) * 255;
         float blue = (freq / 660.0f) * 255;
-        ofSetColor(red, 0, blue, 255);
-        sinks[i].get()->draw();
+        sinks[i].get()->draw(ofColor(red, 0, blue, 255));
     }
     for (int i = 0; i < sources.size(); i++) {
         ofSetColor(0, 255, 0);
