@@ -82,6 +82,7 @@ SoundSource::SoundSource(float freq)
 }
 
 SoundSource::~SoundSource() {
+    sm->RemoveSource(soundSourceID);
 }
 
 float SoundSource::getFrequency() {
@@ -205,7 +206,7 @@ ParticleSink::ParticleSink(float limit, float freq)
 }
 
 ParticleSink::~ParticleSink() {
-    
+    sm->RemoveSource(soundSourceID);
 }
 
 float ParticleSink::getFrequency() {
