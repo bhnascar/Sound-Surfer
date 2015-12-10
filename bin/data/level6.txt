@@ -1,0 +1,5 @@
+6. Undo is your friend
+source 500 200 440 660 880
+sink 250 700 440 3
+sink 500 700 660 3
+sink 750 700 880 3

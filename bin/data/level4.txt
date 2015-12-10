@@ -1,0 +1,8 @@
+4. Destructive interference
+source 75 150 440
+sink 925 650 440 5
+sound 100 400 440
+sound 300 400 440
+sound 500 400 440
+sound 700 400 440
+sound 900 400 440

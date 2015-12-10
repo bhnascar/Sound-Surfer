@@ -1,0 +1,6 @@
+3. Resonance
+source 500 200 440 660
+sink 250 700 440 3
+sink 750 700 660 3
+sound 400 400 660
+sound 600 550 440
