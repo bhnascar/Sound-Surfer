@@ -1,4 +1,4 @@
-# Sound Surfer
+# Sound-Surfer
 Final project for Music 256A / CS 476A. For a detailed description, please see http://ccrma.stanford.edu/~bsung93/soundsurfer.html.
 
 ## Building
