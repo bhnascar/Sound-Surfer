@@ -41,6 +41,10 @@ private:
     int currentLevelIndex = -1;
     Level* currentLevel;
     
+    /* Cumulative player score. */
+    ofTrueTypeFont font;
+    int score = 0;
+    
     /* Instructions */
     ofImage instructions;
     ofImage help;

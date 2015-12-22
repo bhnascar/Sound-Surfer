@@ -35,12 +35,18 @@ void ofApp::setup() {
     // Load instruction image.
     instructions.loadImage("instructions.png");
     help.loadImage("help.png");
+    
+    // Load shared font if it hasn't been loaded.
+    if (!font.isLoaded()) {
+        font.loadFont("Kiddish.ttf", 40, true, true);
+    }
 }
 
 //--------------------------------------------------------------
 void ofApp::update() {
     box2d.update();
     if (currentLevel->complete()) {
+        score += currentLevel->getLineCount();
         delete currentLevel;
         currentLevel = loadNextLevel();
     }
@@ -82,6 +88,13 @@ void ofApp::draw() {
     int imageWidth = help.getWidth();
     int imageHeight = help.getHeight();
     help.draw(ofPoint(20, 20), imageWidth, imageHeight);
+    
+    ostringstream ss;
+    ss << (score + currentLevel->getLineCount());
+    std::string scoreString = ss.str();
+    int stringWidth = font.stringWidth(scoreString);
+    int stringHeight = font.stringHeight(scoreString);
+    font.drawString(scoreString, windowWidth - stringWidth - 20, 20 + stringHeight);
 }
 
 //--------------------------------------------------------------
@@ -90,15 +103,16 @@ void ofApp::keyPressed(int key) {
     currentLevel->keyPressed(key);
     
     // Do application-level key-handling.
-    if (key == 't') {
+    if (key == 't' || key == 'T') {
         // Fullscreen.
         ofToggleFullscreen();
     }
-    else if (key == 'h') {
+    else if (key == 'h' || key == 'H') {
         hkey = true;
     }
-    else if (key == 'n') {
+    else if (key == 'n' || key == 'N') {
         // Skip to next level.
+        score += currentLevel->getLineCount();
         delete currentLevel;
         currentLevel = loadNextLevel();
     }
@@ -106,7 +120,7 @@ void ofApp::keyPressed(int key) {
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key) {
-    if (key == 'h') {
+    if (key == 'h' || key == 'H') {
         hkey = false;
     }
 }

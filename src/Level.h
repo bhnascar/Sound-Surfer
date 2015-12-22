@@ -18,6 +18,9 @@ public:
     /* Returns true if the level has been completed. */
     bool complete();
     
+    /* Gets the line count in the current level. */
+    int getLineCount();
+    
     /* Updates all objects in this level. */
     virtual void update();
     

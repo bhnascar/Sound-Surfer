@@ -109,6 +109,10 @@ bool Level::complete() {
     return true;
 }
 
+int Level::getLineCount() {
+    return lines.size();
+}
+
 void Level::update() {
     // Log start time.
     if (startTime == -1.f) {
@@ -225,11 +229,11 @@ void Level::draw(bool highlightsOnly) {
 }
 
 void Level::keyPressed(int key) {
-    if (key == 'r') {
+    if (key == 'r' || key == 'R') {
         particles.clear();
         lines.clear();
     }
-    else if (key == 'u') {
+    else if (key == 'u' || key == 'U') {
         if (lines.size() > 0) {
             lines.erase(lines.end());
         }
